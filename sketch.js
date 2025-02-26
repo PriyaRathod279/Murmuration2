@@ -28,26 +28,6 @@ function setup() {
   loadWeatherData();
   setInterval(loadWeatherData, 10000);
 
-// Create heading "Murmured"
-let title = createDiv("Murmured");
-title.style('font-family', 'Courier, monospace');
-title.style('font-size', '36px');
-title.style('font-weight', 'bold');
-title.style('text-align', 'center');
-title.style('margin-bottom', '20px');
-
-// Create description
-let description = createDiv(`
-  Murmured is an interactive exploration of time and weather, responding to the circadian rhythm. Touch, slide, listen and observe as murmuration patterns shift with the natural rhythm of the day. Reflect on your connection with these feathered sparks of nature. <br><br>
-  An exploration by Deeptam Das & Priya Rathod, Interaction Design
-`);
-description.style('font-family', 'Courier, monospace');
-description.style('font-size', '16px');
-description.style('text-align', 'center');
-description.style('max-width', '800px');
-description.style('margin', '0 auto 40px auto'); // Center and add space below
-
-
   flock = new Flock();
   
   // Add initial boids
@@ -57,13 +37,9 @@ description.style('margin', '0 auto 40px auto'); // Center and add space below
   }
 
   // Left side controls container
-  // Centered controls container
-let leftControls = createDiv('');
-leftControls.style('width', '400px'); 
-leftControls.style('margin', '0 auto'); // Center horizontally
-leftControls.style('text-align', 'center'); // Center the content
-leftControls.style('position', 'relative'); // Keep position relative for normal flow
-
+  let leftControls = createDiv('');
+  leftControls.position(10, height + 10);
+  leftControls.style('width', '400px');
 
   // Daylight slider with heading and legends
   createP("DAYLIGHT").parent(leftControls)
@@ -460,3 +436,20 @@ class Boid {
     return createVector(0, 0);
   }
 }
+
+2. index.html ->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/addons/p5.sound.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="utf-8" />
+
+  </head>
+  <body>
+    <main>
+    </main>
+    <script src="sketch.js"></script>
+  </body>
+</html>
