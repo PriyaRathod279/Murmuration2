@@ -28,6 +28,26 @@ function setup() {
   loadWeatherData();
   setInterval(loadWeatherData, 10000);
 
+// Create heading "Murmured"
+let title = createDiv("Murmured");
+title.style('font-family', 'Courier, monospace');
+title.style('font-size', '36px');
+title.style('font-weight', 'bold');
+title.style('text-align', 'center');
+title.style('margin-bottom', '20px');
+
+// Create description
+let description = createDiv(`
+  Murmured is an interactive exploration of time and weather, responding to the circadian rhythm. Touch, slide, listen and observe as murmuration patterns shift with the natural rhythm of the day. Reflect on your connection with these feathered sparks of nature. <br><br>
+  An exploration by Deeptam Das & Priya Rathod, Interaction Design
+`);
+description.style('font-family', 'Courier, monospace');
+description.style('font-size', '16px');
+description.style('text-align', 'center');
+description.style('max-width', '800px');
+description.style('margin', '0 auto 40px auto'); // Center and add space below
+
+
   flock = new Flock();
   
   // Add initial boids
