@@ -92,7 +92,7 @@ function setup() {
   createSpan('Humid').parent(humidityLegends);
   createSpan('Dry').parent(humidityLegends);
 
-  // Right side form container - moved to rightmost end
+ /* // Right side form container - moved to rightmost end
   let rightControls = createDiv('');
   rightControls.position(width - 220, height + 10); // Moved further right
   rightControls.style('width', '200px'); // Made container narrower
@@ -137,7 +137,7 @@ function setup() {
   generateButton.style('cursor', 'pointer');
   generateButton.style('margin-top', '15px');
   generateButton.style('width', '100%'); // Full width of container
-  generateButton.mousePressed(downloadPattern);
+  generateButton.mousePressed(downloadPattern);*/
 
   murmurationSound.loop();
 }
