@@ -37,7 +37,7 @@ function setup() {
   }
 
   // Left side controls container
-  l// Centered controls container
+  // Centered controls container
 let leftControls = createDiv('');
 leftControls.style('width', '400px'); 
 leftControls.style('margin', '0 auto'); // Center horizontally
