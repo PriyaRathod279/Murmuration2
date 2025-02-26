@@ -92,7 +92,7 @@ function setup() {
   createSpan('Humid').parent(humidityLegends);
   createSpan('Dry').parent(humidityLegends);
 
- /* // Right side form container - moved to rightmost end
+  // Right side form container - moved to rightmost end
   let rightControls = createDiv('');
   rightControls.position(width - 220, height + 10); // Moved further right
   rightControls.style('width', '200px'); // Made container narrower
@@ -137,7 +137,7 @@ function setup() {
   generateButton.style('cursor', 'pointer');
   generateButton.style('margin-top', '15px');
   generateButton.style('width', '100%'); // Full width of container
-  generateButton.mousePressed(downloadPattern);*/
+  generateButton.mousePressed(downloadPattern);
 
   murmurationSound.loop();
 }
@@ -436,20 +436,3 @@ class Boid {
     return createVector(0, 0);
   }
 }
-
-2. index.html ->
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/p5.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/addons/p5.sound.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <meta charset="utf-8" />
-
-  </head>
-  <body>
-    <main>
-    </main>
-    <script src="sketch.js"></script>
-  </body>
-</html>
