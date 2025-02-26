@@ -1,211 +1,153 @@
-let flock;
-let weatherData;
-let apiURL = "https://api.openweathermap.org/data/2.5/weather?q=Bengaluru&APPID=aacedc9a30cfcbe4d7e237cd5ad4830b";
-
-let currentTemp = 273;
-let targetTemp = 273;
-let currentHumidity = 50;
-let targetHumidity = 50;
-let daylightValue = 0;
-let weatherCondition = "";
-
-let daylightSlider;
-let humiditySlider;
-let skyConditionSlider;
-
-let murmurationSound;
-let repelSound;
-
-let repelPoints = [];
-
-function preload() {
-  murmurationSound = loadSound("STARLINGS.mp3");
-  repelSound = loadSound("FLIGHT.mp3");
-}
+let birds = [];
+let slider1, slider2, slider3;
 
 function setup() {
-  createCanvas(1200, 600);
-  loadWeatherData();
-  setInterval(loadWeatherData, 10000);
+    createCanvas(windowWidth, windowHeight);
 
-  flock = new Flock();
+    // Initialize sliders
+    slider1 = select('#slider1');
+    slider2 = select('#slider2');
+    slider3 = select('#slider3');
 
-  for (let i = 0; i < 2000; i++) {
-    let b = new Boid(width / 2 + random(-50, 50), height / 2 + random(-50, 50));
-    flock.addBoid(b);
-  }
-
-  // Positioning sliders horizontally and center-bottom
-  let sliderWidth = 200;
-  let totalWidth = sliderWidth * 3 + 40;
-  let startX = (width - totalWidth) / 2;
-  let sliderY = height - 50;
-
-  daylightSlider = createSlider(0, 1, 0.5, 0.01);
-  daylightSlider.position(startX, sliderY);
-  createP("Daylight (0 = Sunrise, 1 = Sunset)").position(startX, sliderY + 20);
-
-  skyConditionSlider = createSlider(0, 1, 0.5, 0.01);
-  skyConditionSlider.position(startX + sliderWidth + 20, sliderY);
-  createP("Sky Condition (0 = Rainy, 1 = Clear)").position(startX + sliderWidth + 20, sliderY + 20);
-
-  humiditySlider = createSlider(0, 100, 50, 1);
-  humiditySlider.position(startX + 2 * (sliderWidth + 20), sliderY);
-  createP("Humidity (0 = Humid, 100 = Dry)").position(startX + 2 * (sliderWidth + 20), sliderY + 20);
-
-  murmurationSound.loop();
+    // Create flock of birds
+    for (let i = 0; i < 200; i++) {
+        birds.push(new Bird(random(width * 0.4, width * 0.6), random(height * 0.4, height * 0.6)));
+    }
 }
 
 function draw() {
-  background(255);
+    background(255);
 
-  daylightValue = daylightSlider.value();
-  let skyConditionValue = skyConditionSlider.value();
-  currentHumidity = humiditySlider.value();
-
-  if (weatherData) {
-    currentTemp = lerp(currentTemp, targetTemp, 0.05);
-    currentHumidity = lerp(currentHumidity, targetHumidity, 0.05);
-
-    for (let boid of flock.boids) {
-      boid.updateWeatherEffects(currentTemp, currentHumidity, weatherCondition, daylightValue, skyConditionValue);
+    // Update and display all birds
+    for (let bird of birds) {
+        bird.flock(birds);
+        bird.update();
+        bird.show();
     }
-  }
-
-  flock.run();
-  adjustBoidCount(daylightValue, skyConditionValue);
-  adjustSoundVolumeAndPitch();
-
-  if (repelPoints.length > 0) {
-    flock.repelMultiple(repelPoints);
-  }
 }
 
-function mousePressed() {
-  if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
-    repelPoints.push(createVector(mouseX, mouseY));
-    repelSound.setVolume(0.1);
-    repelSound.play(0, 1, 0.2, 0, 1.5);
-  }
+// Resize canvas dynamically
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
 }
 
-function mouseReleased() {
-  if (repelSound.isPlaying()) {
-    repelSound.fade(0, 1.5);
-  }
-  repelPoints = [];
-}
-
-function adjustBoidCount(daylightValue, skyConditionValue) {
-  let targetBoidCount = map(daylightValue, 0, 1, 500, 1700);
-  while (flock.boids.length > targetBoidCount) flock.boids.pop();
-  while (flock.boids.length < targetBoidCount) {
-    let b = new Boid(width / 2 + random(-100, 100), height / 2 + random(-100, 100));
-    flock.addBoid(b);
-  }
-}
-
-function adjustSoundVolumeAndPitch() {
-  let avgSpeed = flock.getAverageSpeed();
-  murmurationSound.rate(map(avgSpeed, 2, 7, 0.8, 1.5));
-  let density = flock.boids.length / 1200;
-  murmurationSound.setVolume(density);
-}
-
-function loadWeatherData() {
-  loadJSON(apiURL, processWeatherData, handleError);
-}
-
-function processWeatherData(data) {
-  weatherData = data;
-  targetTemp = weatherData.main.temp;
-  targetHumidity = weatherData.main.humidity;
-  weatherCondition = weatherData.weather[0].description;
-
-  let now = millis() / 1000 + weatherData.timezone;
-  let sunrise = weatherData.sys.sunrise;
-  let sunset = weatherData.sys.sunset;
-
-  if (now < sunrise || now > sunset) {
-    daylightValue = 0;
-  } else {
-    daylightValue = map(now, sunrise, sunset, 0, 1);
-  }
-}
-
-function handleError(err) {
-  console.error("Error loading weather data:", err);
-}
-
-class Flock {
-  constructor() {
-    this.boids = [];
-  }
-
-  run() {
-    for (let boid of this.boids) {
-      boid.run(this.boids);
+// Bird class for movement
+class Bird {
+    constructor(x, y) {
+        this.position = createVector(x, y);
+        this.velocity = p5.Vector.random2D();
+        this.acceleration = createVector();
+        this.maxSpeed = 4;
+        this.maxForce = 0.1;
     }
-  }
 
-  repelMultiple(points) {
-    for (let point of points) {
-      for (let boid of this.boids) {
-        let distance = p5.Vector.dist(boid.position, point);
+    update() {
+        this.velocity.add(this.acceleration);
+        this.velocity.limit(this.maxSpeed);
+        this.position.add(this.velocity);
+        this.acceleration.mult(0);
 
-        if (distance < 200) {
-          let repelForce = p5.Vector.sub(boid.position, point);
-          repelForce.setMag(map(distance, 0, 200, boid.maxforce * 20, 0));
-          boid.applyForce(repelForce);
+        // Wrap edges for continuous movement
+        this.edges();
+    }
+
+    applyForce(force) {
+        this.acceleration.add(force);
+    }
+
+    flock(birds) {
+        let alignment = this.align(birds);
+        let cohesion = this.cohere(birds);
+        let separation = this.separate(birds);
+
+        // Use slider values to influence behavior
+        alignment.mult(slider1.value() / 100);
+        cohesion.mult(slider2.value() / 100);
+        separation.mult(slider3.value() / 100);
+
+        this.applyForce(alignment);
+        this.applyForce(cohesion);
+        this.applyForce(separation);
+    }
+
+    align(birds) {
+        let perceptionRadius = 50;
+        let steering = createVector();
+        let total = 0;
+        for (let other of birds) {
+            let d = dist(this.position.x, this.position.y, other.position.x, other.position.y);
+            if (other != this && d < perceptionRadius) {
+                steering.add(other.velocity);
+                total++;
+            }
         }
-      }
+        if (total > 0) {
+            steering.div(total);
+            steering.setMag(this.maxSpeed);
+            steering.sub(this.velocity);
+            steering.limit(this.maxForce);
+        }
+        return steering;
     }
-  }
 
-  addBoid(b) {
-    this.boids.push(b);
-  }
-
-  getAverageSpeed() {
-    let totalSpeed = 0;
-    for (let boid of this.boids) {
-      totalSpeed += boid.velocity.mag();
+    cohere(birds) {
+        let perceptionRadius = 50;
+        let steering = createVector();
+        let total = 0;
+        for (let other of birds) {
+            let d = dist(this.position.x, this.position.y, other.position.x, other.position.y);
+            if (other != this && d < perceptionRadius) {
+                steering.add(other.position);
+                total++;
+            }
+        }
+        if (total > 0) {
+            steering.div(total);
+            steering.sub(this.position);
+            steering.setMag(this.maxSpeed);
+            steering.sub(this.velocity);
+            steering.limit(this.maxForce);
+        }
+        return steering;
     }
-    return totalSpeed / this.boids.length;
-  }
-}
 
-class Boid {
-  constructor(x, y) {
-    this.position = createVector(x, y);
-    this.velocity = createVector(random(-1, 1), random(-1, 1));
-    this.acceleration = createVector(0, 0);
-    this.maxspeed = 3;
-    this.maxforce = 0.3;
-  }
+    separate(birds) {
+        let perceptionRadius = 30;
+        let steering = createVector();
+        let total = 0;
+        for (let other of birds) {
+            let d = dist(this.position.x, this.position.y, other.position.x, other.position.y);
+            if (other != this && d < perceptionRadius) {
+                let diff = p5.Vector.sub(this.position, other.position);
+                diff.div(d * d);
+                steering.add(diff);
+                total++;
+            }
+        }
+        if (total > 0) {
+            steering.div(total);
+            steering.setMag(this.maxSpeed);
+            steering.sub(this.velocity);
+            steering.limit(this.maxForce);
+        }
+        return steering;
+    }
 
-  applyForce(force) {
-    this.acceleration.add(force);
-  }
+    edges() {
+        if (this.position.x > width) this.position.x = 0;
+        if (this.position.x < 0) this.position.x = width;
+        if (this.position.y > height) this.position.y = 0;
+        if (this.position.y < 0) this.position.y = height;
+    }
 
-  run(boids) {
-    this.update();
-    this.borders();
-    this.render();
-  }
-
-  update() {
-    this.velocity.add(this.acceleration);
-    this.velocity.limit(this.maxspeed);
-    this.position.add(this.velocity);
-    this.acceleration.mult(0);
-  }
-
-  borders() {}
-
-  render() {
-    fill(50);
-    stroke(50);
-    ellipse(this.position.x, this.position.y, 5, 5);
-  }
+    show() {
+        stroke(0);
+        strokeWeight(2);
+        fill(50);
+        push();
+        translate(this.position.x, this.position.y);
+        rotate(this.velocity.heading());
+        triangle(0, -5, 10, 0, 0, 5);
+        pop();
+    }
 }
