@@ -37,9 +37,13 @@ function setup() {
   }
 
   // Left side controls container
-  let leftControls = createDiv('');
-  leftControls.position(10, height + 10);
-  leftControls.style('width', '400px');
+  l// Centered controls container
+let leftControls = createDiv('');
+leftControls.style('width', '400px'); 
+leftControls.style('margin', '0 auto'); // Center horizontally
+leftControls.style('text-align', 'center'); // Center the content
+leftControls.style('position', 'relative'); // Keep position relative for normal flow
+
 
   // Daylight slider with heading and legends
   createP("DAYLIGHT").parent(leftControls)
@@ -92,7 +96,7 @@ function setup() {
   createSpan('Humid').parent(humidityLegends);
   createSpan('Dry').parent(humidityLegends);
 
-  // Right side form container - moved to rightmost end
+ /* // Right side form container - moved to rightmost end
   let rightControls = createDiv('');
   rightControls.position(width - 220, height + 10); // Moved further right
   rightControls.style('width', '200px'); // Made container narrower
@@ -137,7 +141,7 @@ function setup() {
   generateButton.style('cursor', 'pointer');
   generateButton.style('margin-top', '15px');
   generateButton.style('width', '100%'); // Full width of container
-  generateButton.mousePressed(downloadPattern);
+  generateButton.mousePressed(downloadPattern); */
 
   murmurationSound.loop();
 }
