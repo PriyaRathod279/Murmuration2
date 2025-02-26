@@ -2,32 +2,55 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Murmured</title>
-    <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/p5.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/addons/p5.sound.min.js"></script>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="style.css">
+  <title>Birth Flock</title>
 </head>
 
 <body>
-    <div id="heading">Murmured</div>
+  <!-- Animation at the top -->
+  <div id="canvas-container">
+    <!-- Animation will be rendered here -->
+  </div>
 
-    <div id="description">
-        Murmured is an interactive exploration of time and weather, responding to the circadian rhythm. Touch, slide,
-        listen, and observe as murmuration patterns shift with the natural rhythm of the day. Reflect on your connection
-        with these feathered sparks of nature. <br /><br />
-        An exploration by Deeptam Das & Priya Rathod, Interaction Design.
+  <!-- Controls section at the bottom in one row -->
+  <div id="controls-container">
+    <div class="control">
+      <p>Daylight:</p>
+      <input type="range" id="daylight-slider" min="0" max="1" step="0.01" value="0.5">
+    </div>
+    <div class="control">
+      <p>Sky Condition:</p>
+      <input type="range" id="sky-condition-slider" min="0" max="1" step="0.01" value="0.5">
+    </div>
+    <div class="control">
+      <p>Humidity:</p>
+      <input type="range" id="humidity-slider" min="0" max="100" step="1" value="50">
+    </div>
+  </div>
+
+  <!-- Input Section -->
+  <h2 class="flock-heading">See Your Birth Flock</h2>
+  <div id="input-container">
+    <div class="input-group">
+      <div class="input-title">Birthdate</div>
+      <input type="date" id="dob-input" max="2024-01-03">
     </div>
 
-    <!-- Sliders -->
-    <div id="sliders">
-        <input id="slider1" type="range" min="0" max="100" value="50" />
-        <input id="slider2" type="range" min="0" max="100" value="50" />
-        <input id="slider3" type="range" min="0" max="100" value="50" />
+    <div class="input-group">
+      <div class="input-title">Birthplace</div>
+      <input type="text" id="text-input" placeholder="Enter birthplace">
     </div>
 
-    <!-- Include p5.js and sketch -->
-    <script src="p5.min.js"></script>
-    <script src="sketch.js"></script>
+    <div class="input-group">
+      <div class="input-title">Generate Flock</div>
+      <button id="download-btn">Generate</button>
+    </div>
+  </div>
+
+  <script src="sketch.js"></script>
 </body>
 
 </html>
