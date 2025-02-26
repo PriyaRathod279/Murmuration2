@@ -1,15 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/p5.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/addons/p5.sound.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <meta charset="utf-8" />
 
-  </head>
-  <body>
-    <main>
-    </main>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Murmured</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div id="heading">Murmured</div>
+
+    <div id="description">
+        Murmured is an interactive exploration of time and weather, responding to the circadian rhythm. Touch, slide,
+        listen, and observe as murmuration patterns shift with the natural rhythm of the day. Reflect on your connection
+        with these feathered sparks of nature. <br /><br />
+        An exploration by Deeptam Das & Priya Rathod, Interaction Design.
+    </div>
+
+    <!-- Sliders -->
+    <div id="sliders">
+        <input id="slider1" type="range" min="0" max="100" value="50" />
+        <input id="slider2" type="range" min="0" max="100" value="50" />
+        <input id="slider3" type="range" min="0" max="100" value="50" />
+    </div>
+
+    <!-- Include p5.js and sketch -->
+    <script src="p5.min.js"></script>
     <script src="sketch.js"></script>
-  </body>
+</body>
+
 </html>
