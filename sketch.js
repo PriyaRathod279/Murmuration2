@@ -37,9 +37,13 @@ function setup() {
   }
 
   // Left side controls container
-  let leftControls = createDiv('');
-  leftControls.position(10, height + 10);
-  leftControls.style('width', '400px');
+  // Centered controls container
+let leftControls = createDiv('');
+leftControls.style('width', '400px'); 
+leftControls.style('margin', '0 auto'); // Center horizontally
+leftControls.style('text-align', 'center'); // Center the content
+leftControls.style('position', 'relative'); // Keep position relative for normal flow
+
 
   // Daylight slider with heading and legends
   createP("DAYLIGHT").parent(leftControls)
